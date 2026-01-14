@@ -114,8 +114,26 @@
                         <input type="text" id="formDungTich">
                     </div>
                     <div class="form-group">
-                        <label>URL Hình ảnh</label>
-                        <input type="text" id="formHinhAnh">
+                        <label>Hình ảnh sản phẩm</label>
+                        <div class="image-upload-wrapper">
+                            <input type="hidden" id="formHinhAnh">
+                            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                            <input type="file" id="cameraInput" accept="image/*" capture="environment"
+                                style="display: none;">
+
+                            <div class="image-preview-container" id="imagePreview">
+                                <i class="fas fa-image"></i>
+                                <span>Chưa có ảnh</span>
+                            </div>
+
+                            <div class="upload-buttons">
+                                <button type="button" id="btnCapture" class="btn-secondary"><i
+                                        class="fas fa-camera"></i> Máy ảnh</button>
+                                <button type="button" id="btnUpload" class="btn-secondary"><i class="fas fa-upload"></i>
+                                    Chọn file</button>
+                            </div>
+                        </div>
+
                         <label>Công dụng</label>
                         <textarea id="formCongDung" rows="3"></textarea>
                         <label>Liều lượng & Cách dùng</label>

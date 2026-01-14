@@ -23,14 +23,68 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportPngBtn = document.getElementById('exportPngBtn');
     const exportTemplate = document.getElementById('exportTemplate');
 
-    let currentModalProduct = null;
+    // IMAGE UPLOAD ELEMENTS
+    const btnCapture = document.getElementById('btnCapture');
+    const btnUpload = document.getElementById('btnUpload');
+    const fileInput = document.getElementById('fileInput');
+    const cameraInput = document.getElementById('cameraInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const formHinhAnh = document.getElementById('formHinhAnh');
 
-    // CẤU HÌNH GOOGLE SHEETS
+    let currentModalProduct = null;
+    let selectedImageBase64 = null;
+
+    // CẤU HÌNH GOOGLE SHEETS & DRIVE
     const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV_GtZzTm4iDRw2HZgVArJxo_b5qbGRontZ9HHBZDJIS_e3EmycnozG2thb8dwhAJ_g7q7RPyow2ZA/pub?gid=0&single=true&output=csv';
+    const GAS_WEB_APP_URL = ''; // NGƯỜI DÙNG CẦN DÁN URL WEB APP SAU KHI TRIỂN KHAI GAS
 
     let sheetProducts = []; // Dữ liệu từ Google Sheets
     let localProducts = JSON.parse(localStorage.getItem('titaco_local_products') || '[]'); // Dữ liệu thêm tay
     let allProducts = []; // Tổng hợp
+
+    // LOGIC XỬ LÝ ẢNH
+    function handleImageSelect(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            selectedImageBase64 = event.target.result;
+            imagePreview.innerHTML = `<img src="${selectedImageBase64}">`;
+            imagePreview.style.borderColor = 'var(--primary-color)';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    if (btnUpload) btnUpload.addEventListener('click', () => fileInput.click());
+    if (btnCapture) btnCapture.addEventListener('click', () => cameraInput.click());
+    if (fileInput) fileInput.addEventListener('change', handleImageSelect);
+    if (cameraInput) cameraInput.addEventListener('change', handleImageSelect);
+
+    async function uploadImageToDrive(base64, fileName) {
+        if (!GAS_WEB_APP_URL) {
+            console.warn('Chưa cấu hình GAS_WEB_APP_URL. Ảnh sẽ được lưu dưới dạng Base64 tạm thời.');
+            return base64;
+        }
+
+        try {
+            const response = await fetch(GAS_WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    base64: base64,
+                    name: fileName,
+                    type: 'image/png'
+                })
+            });
+            const result = await response.json();
+            if (result.success) return result.url;
+            throw new Error(result.error);
+        } catch (err) {
+            console.error('Lỗi upload Drive:', err);
+            alert('Không thể tải ảnh lên Drive. Vui lòng kiểm tra cấu hình GAS.');
+            return base64;
+        }
+    }
 
     /**
      * Hàm parse CSV
