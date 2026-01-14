@@ -200,29 +200,42 @@ document.addEventListener('DOMContentLoaded', () => {
             section.className = 'category-section';
 
             section.innerHTML = `
-                <h2 class="category-title">
-                    <i class="fas fa-layer-group"></i> ${groupName}
-                </h2>
-                <div class="product-grid">
-                    ${groupItems.map((p) => `
-                        <div class="product-card" data-id="${p.tenSp}">
-                            <div class="product-img-container">
-                                <img src="${p.hinhAnh}" alt="${p.tenSp}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x250?text=No+Image'">
-                            </div>
-                            <div class="product-info">
-                                <div class="product-meta">
-                                    <span class="badge">${p.dungTich}</span>
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-layer-group"></i> ${groupName} 
+                        <span class="product-count">(${groupItems.length} sản phẩm)</span>
+                    </h2>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="category-content">
+                    <div class="product-grid">
+                        ${groupItems.map((p) => `
+                            <div class="product-card" data-id="${p.tenSp}">
+                                <div class="product-img-container">
+                                    <img src="${p.hinhAnh}" alt="${p.tenSp}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x250?text=No+Image'">
                                 </div>
-                                <h3 class="product-name">${p.tenSp}</h3>
-                                <div class="product-details">
-                                    <p><strong>Hoạt chất:</strong> ${p.hoatChat}</p>
-                                    <p><strong>Công dụng:</strong> ${p.congDung}</p>
+                                <div class="product-info">
+                                    <div class="product-meta">
+                                        <span class="badge">${p.dungTich}</span>
+                                    </div>
+                                    <h3 class="product-name">${p.tenSp}</h3>
+                                    <div class="product-details">
+                                        <p><strong>Hoạt chất:</strong> ${p.hoatChat}</p>
+                                        <p><strong>Công dụng:</strong> ${p.congDung}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `).join('')}
+                        `).join('')}
+                    </div>
                 </div>
             `;
+
+            // Xử lý sự kiện đóng/mở
+            const header = section.querySelector('.category-header');
+            header.addEventListener('click', () => {
+                section.classList.toggle('collapsed');
+            });
+
             sectionsContainer.appendChild(section);
         }
 
