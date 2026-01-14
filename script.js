@@ -144,24 +144,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hàm lấy dữ liệu từ Google Sheets
     async function loadDataFromSheets() {
         if (!GOOGLE_SHEET_CSV_URL) {
+            console.log('Chưa cấu hình URL Google Sheets, sử dụng dữ liệu tĩnh.');
             renderProducts(allProducts);
             return;
         }
 
-        const finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(GOOGLE_SHEET_CSV_URL)}&_=${Date.now()}`;
-
         try {
-            console.log('Đang tải dữ liệu từ Google Sheets (via Proxy)...');
-            const response = await fetch(finalUrl);
-            if (!response.ok) throw new Error('Không thể tải dữ liệu');
+            console.log('Đang tải dữ liệu trực tiếp từ Google Sheets...');
+            // Thêm timestamp để tránh cache
+            const urlWithTimestamp = `${GOOGLE_SHEET_CSV_URL}&_=${Date.now()}`;
+            const response = await fetch(urlWithTimestamp);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const data = await response.text();
             const parsedData = parseCSV(data);
+
             if (parsedData.length > 0) {
                 allProducts = parsedData;
+                console.log('Đã cập nhật dữ liệu từ Google Sheets thành công!');
+            } else {
+                console.warn('Dữ liệu tải về trống hoặc sai định dạng.');
             }
             renderProducts(allProducts);
         } catch (error) {
-            console.error('Lỗi tải Sheets:', error);
+            console.error('Lỗi khi tải Google Sheets:', error);
+            console.log('Đang chuyển sang sử dụng dữ liệu tĩnh dự phòng...');
             renderProducts(allProducts);
         }
     }
