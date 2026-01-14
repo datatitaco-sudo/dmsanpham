@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openModal(product) {
         currentModalProduct = product;
-        document.getElementById('modalImg').innerHTML = `<img src="${product.hinhAnh}" onerror="this.src='https://via.placeholder.com/400x400?text=No+Image'">`;
+        document.getElementById('modalImg').innerHTML = `<img src="${product.hinhAnh || LOCAL_PLACEHOLDER}" onerror="this.src=LOCAL_PLACEHOLDER">`;
         document.getElementById('modalInfo').innerHTML = `
             <h2>${product.tenSp}</h2>
             <div class="info-item"><label>Nhóm:</label><div>${product.nhom}</div></div>
@@ -461,19 +461,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function generatePNG(name) {
+        console.log("Bắt đầu generate PNG cho:", name);
         exportPngBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
         try {
             const canvas = await html2canvas(exportTemplate, {
                 useCORS: true,
-                scale: 2, // Tăng chất lượng ảnh
-                backgroundColor: "#ffffff"
+                allowTaint: true,
+                scale: 2,
+                backgroundColor: "#ffffff",
+                logging: true // Bật log để debug nếu cần
             });
+            console.log("Canvas đã tạo xong");
             const link = document.createElement('a');
             link.download = `Catalogue-${name}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
+            console.log("Đã kích hoạt tải ảnh");
         } catch (err) {
-            console.error(err);
+            console.error("Lỗi html2canvas:", err);
             alert("Lỗi khi xuất ảnh. Vui lòng thử lại!");
         }
         exportPngBtn.innerHTML = '<i class="fas fa-file-image"></i> Xuất ảnh Catalogue PNG';
