@@ -296,6 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
         formTitle.innerText = "Thêm sản phẩm mới";
         productForm.reset();
         editOriginalName.value = "";
+        selectedImageBase64 = null;
+        imagePreview.innerHTML = `<i class="fas fa-image"></i><span>Chưa có ảnh</span>`;
+        imagePreview.style.borderColor = '#ddd';
+        formHinhAnh.value = "";
         formModal.style.display = 'flex';
     });
 
@@ -325,7 +329,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('formNhom').value = p.nhom;
         document.getElementById('formHoatChat').value = p.hoatChat;
         document.getElementById('formDungTich').value = p.dungTich;
-        document.getElementById('formHinhAnh').value = p.hinhAnh;
+        formHinhAnh.value = p.hinhAnh;
+        imagePreview.innerHTML = `<img src="${p.hinhAnh}" onerror="this.src='https://via.placeholder.com/300x250?text=No+Image'">`;
+        selectedImageBase64 = null; // Reset để không upload lại nếu không thay đổi
         document.getElementById('formCongDung').value = p.congDung;
         document.getElementById('formLieuPhun').value = p.lieuPhun || "";
         formModal.style.display = 'flex';
@@ -339,14 +345,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    productForm.addEventListener('submit', (e) => {
+    productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const submitBtn = productForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+
+        // Hiển thị loading
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải ảnh...';
+
+        let finalImageUrl = formHinhAnh.value;
+
+        // Nếu người dùng chọn ảnh mới, thực hiện upload lên Drive
+        if (selectedImageBase64) {
+            const fileName = `sp_${Date.now()}_${document.getElementById('formTenSp').value}.png`;
+            finalImageUrl = await uploadImageToDrive(selectedImageBase64, fileName);
+        }
+
         const newProduct = {
             tenSp: document.getElementById('formTenSp').value,
             nhom: document.getElementById('formNhom').value,
             hoatChat: document.getElementById('formHoatChat').value,
             dungTich: document.getElementById('formDungTich').value,
-            hinhAnh: document.getElementById('formHinhAnh').value,
+            hinhAnh: finalImageUrl,
             congDung: document.getElementById('formCongDung').value,
             lieuPhun: document.getElementById('formLieuPhun').value,
             source: 'local'
@@ -359,6 +380,8 @@ document.addEventListener('DOMContentLoaded', () => {
         localProducts.push(newProduct);
         localStorage.setItem('titaco_local_products', JSON.stringify(localProducts));
 
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
         formModal.style.display = 'none';
         refreshData();
     });
