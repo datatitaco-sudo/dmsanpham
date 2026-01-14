@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titaco Agri - Catalogue Sản Phẩm</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-area">
+                <h1>TITACO AGRI</h1>
+            </div>
+            <div class="search-area">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm tên sản phẩm hoặc hoạt chất...">
+            </div>
+        </div>
+    </header>
+
+    <main id="mainContent">
+        <!-- Nội dung sản phẩm sẽ được render bởi JS -->
+        <div id="productSections"></div>
+        <div id="noResults" style="display: none; text-align: center; margin-top: 5rem;">
+            <i class="fas fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+            <p style="color: #666; font-size: 1.2rem;">Không tìm thấy sản phẩm phù hợp.</p>
+        </div>
+    </main>
+
+    <!-- Modal chi tiết sản phẩm -->
+    <div id="productModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-body">
+                <div class="modal-img" id="modalImg">
+                    <!-- Ảnh sẽ được chèn vào đây -->
+                </div>
+                <div class="modal-info" id="modalInfo">
+                    <!-- Thông tin chi tiết -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cửa sổ Chat Gemini -->
+    <div id="geminiChat" class="chat-window">
+        <div class="chat-header">
+            <span><i class="fas fa-robot"></i> Trợ lý Titaco AI</span>
+            <span class="close-chat">&times;</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">Chào bạn! Mình là trợ lý AI của Titaco. Mình có thể giúp gì cho bạn hôm nay?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Nhập câu hỏi của bạn...">
+            <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Nút hỗ trợ -->
+    <div class="support-fab" id="geminiBtn" title="Hỗ trợ AI">
+        <i class="fas fa-robot" style="font-size: 1.5rem;"></i>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
