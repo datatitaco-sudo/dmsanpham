@@ -13,6 +13,8 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="data:,">
+    <!-- Thư viện Xuất ảnh -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
@@ -24,6 +26,9 @@
             <div class="search-area">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" id="searchInput" placeholder="Tìm kiếm tên sản phẩm hoặc hoạt chất...">
+            </div>
+            <div class="admin-link" id="adminBtn" title="Quản trị sản phẩm">
+                <i class="fas fa-user-shield"></i> Admin
             </div>
         </div>
     </header>
@@ -49,7 +54,84 @@
                     <!-- Thông tin chi tiết -->
                 </div>
             </div>
+            <div class="modal-footer">
+                <button id="exportPngBtn" class="btn-primary"><i class="fas fa-file-image"></i> Xuất ảnh Catalogue
+                    PNG</button>
+            </div>
         </div>
+    </div>
+
+    <!-- Modal Quản trị (Admin) -->
+    <div id="adminModal" class="modal-overlay">
+        <div class="modal-content admin-modal">
+            <div class="admin-header">
+                <h2><i class="fas fa-tools"></i> Quản lý sản phẩm</h2>
+                <span class="close-admin">&times;</span>
+            </div>
+            <div class="admin-body">
+                <div class="admin-actions">
+                    <button id="addNewBtn" class="btn-success"><i class="fas fa-plus"></i> Thêm sản phẩm mới</button>
+                </div>
+                <div class="admin-table-container">
+                    <table id="adminProductTable">
+                        <thead>
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Nhóm</th>
+                                <th>Quy cách</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductList">
+                            <!-- Danh sách sp sẽ được render ở đây -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Form (Thêm/Sửa) -->
+    <div id="formModal" class="modal-overlay">
+        <div class="modal-content form-modal">
+            <div class="admin-header">
+                <h2 id="formTitle">Thêm sản phẩm mới</h2>
+                <span class="close-form">&times;</span>
+            </div>
+            <form id="productForm">
+                <input type="hidden" id="editOriginalName">
+                <div class="form-grid">
+                    <div class="form-group border-right">
+                        <label>Tên sản phẩm*</label>
+                        <input type="text" id="formTenSp" required>
+                        <label>Nhóm*</label>
+                        <input type="text" id="formNhom" required list="nhomList">
+                        <datalist id="nhomList"></datalist>
+                        <label>Hoạt chất</label>
+                        <input type="text" id="formHoatChat">
+                        <label>Dung tích/Quy cách</label>
+                        <input type="text" id="formDungTich">
+                    </div>
+                    <div class="form-group">
+                        <label>URL Hình ảnh</label>
+                        <input type="text" id="formHinhAnh">
+                        <label>Công dụng</label>
+                        <textarea id="formCongDung" rows="3"></textarea>
+                        <label>Liều lượng & Cách dùng</label>
+                        <textarea id="formLieuPhun" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn-primary">Lưu sản phẩm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Template Xuất ảnh (Bị ẩn) -->
+    <div id="exportTemplate" class="export-container" style="position: absolute; left: -9999px;">
+        <!-- Cấu trúc giống hệt ảnh mẫu dẽ được render bởi JS -->
     </div>
 
     <!-- Cửa sổ Chat Gemini -->
