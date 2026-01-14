@@ -35,8 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedImageBase64 = null;
 
     // CẤU HÌNH GOOGLE SHEETS & DRIVE
-    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV_GtZzTm4iDRw2HZgVArJxo_b5qbGRontZ9HHBZDJIS_e3EmycnozG2thb8dwhAJ_g7q7RPyow2ZA/pub?gid=0&single=true&output=csv';
+    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV_GtZzTm4iDRw2HZgVArXxo_b5qbGRontZ9HHBZDJIS_e3EmycnozG2thb8dwhAJ_g7q7RPYow2ZA/pub?gid=0&single=true&output=csv';
     const GAS_WEB_APP_URL = ''; // NGƯỜI DÙNG CẦN DÁN URL WEB APP SAU KHI TRIỂN KHAI GAS
+
+    // Placeholder ảnh nội bộ để tránh lỗi mạng ERR_NAME_NOT_RESOLVED
+    const LOCAL_PLACEHOLDER = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iI2FhYSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+S2jDtW5nIGPDsyDhuqNuaDwvdGV4dD48L3N2Zz4=';
 
     let sheetProducts = []; // Dữ liệu từ Google Sheets
     let localProducts = JSON.parse(localStorage.getItem('titaco_local_products') || '[]'); // Dữ liệu thêm tay
@@ -248,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="category-content"><div class="product-grid">${groupItems.map(p => `
                     <div class="product-card" data-id="${p.tenSp}">
-                        <div class="product-img-container"><img src="${p.hinhAnh}" alt="${p.tenSp}" onerror="this.src='https://via.placeholder.com/300x250?text=No+Image'"></div>
+                        <div class="product-img-container"><img src="${p.hinhAnh || LOCAL_PLACEHOLDER}" alt="${p.tenSp}" onerror="this.src=LOCAL_PLACEHOLDER"></div>
                         <div class="product-info">
                             <div class="product-meta"><span class="badge">${p.dungTich}</span></div>
                             <h3 class="product-name">${p.tenSp}</h3>
@@ -308,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderAdminList() {
         adminProductList.innerHTML = allProducts.map(p => `
             <tr>
-                <td><img src="${p.hinhAnh}" class="admin-img-preview" onerror="this.src='https://via.placeholder.com/50x50'"></td>
+                <td><img src="${p.hinhAnh || LOCAL_PLACEHOLDER}" class="admin-img-preview" onerror="this.src=LOCAL_PLACEHOLDER"></td>
                 <td><strong>${p.tenSp}</strong><br><small>${p.source === 'sheet' ? '(Google Sheet)' : '(Đã thêm trực tiếp)'}</small></td>
                 <td>${p.nhom}</td>
                 <td>${p.dungTich}</td>
@@ -330,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('formHoatChat').value = p.hoatChat;
         document.getElementById('formDungTich').value = p.dungTich;
         formHinhAnh.value = p.hinhAnh;
-        imagePreview.innerHTML = `<img src="${p.hinhAnh}" onerror="this.src='https://via.placeholder.com/300x250?text=No+Image'">`;
+        imagePreview.innerHTML = `<img src="${p.hinhAnh || LOCAL_PLACEHOLDER}" onerror="this.src=LOCAL_PLACEHOLDER">`;
         selectedImageBase64 = null; // Reset để không upload lại nếu không thay đổi
         document.getElementById('formCongDung').value = p.congDung;
         document.getElementById('formLieuPhun').value = p.lieuPhun || "";
@@ -410,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="export-main-body">
                 <div class="export-img-card">
-                    <img src="${p.hinhAnh}" onerror="this.src='https://via.placeholder.com/500x500'">
+                    <img src="${p.hinhAnh || LOCAL_PLACEHOLDER}" onerror="this.src='${LOCAL_PLACEHOLDER}'">
                 </div>
                 <div class="export-side-info">
                     <div class="export-label-small"><i class="fas fa-flask"></i> Hoạt chất chính</div>
@@ -438,12 +441,22 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="export-footer-text">Titaco Agri Catalogue System</div>
         `;
 
-        // Chờ ảnh load xong
+        // Chờ ảnh load xong hoặc lỗi đều tiến hành xuất ảnh sau 2s (safety timeout)
         const img = exportTemplate.querySelector('img');
+        const startExport = () => {
+            if (!img.dataset.exported) {
+                img.dataset.exported = "true";
+                generatePNG(p.tenSp);
+            }
+        };
+
         if (img.complete) {
-            generatePNG(p.tenSp);
+            startExport();
         } else {
-            img.onload = () => generatePNG(p.tenSp);
+            img.onload = startExport;
+            img.onerror = startExport;
+            // Timeout sau 3 giây nếu mạng quá lag
+            setTimeout(startExport, 3000);
         }
     });
 
