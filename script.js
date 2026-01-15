@@ -400,7 +400,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hàm định dạng tên sản phẩm: Phần trong ngoặc chữ thường và màu đỏ
     function formatProductName(name) {
-        return name.replace(/\((.*?)\)/g, '<span class="export-name-note">($1)</span>');
+        if (!name) return "";
+        // Tách phần ngoài và phần trong ngoặc
+        return name.replace(/\((.*?)\)/g, (match, p1) => {
+            return `<span class="export-name-note">(${p1})</span>`;
+        });
     }
 
     // XUẤT ẢNH PNG

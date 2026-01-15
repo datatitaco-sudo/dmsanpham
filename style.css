@@ -529,17 +529,20 @@ main {
     /* Giảm từ 80px */
     font-weight: 900;
     color: #1b75bc;
-    /* text-transform: uppercase; -- Bỏ để hỗ trợ phần trong ngoặc chữ thường */
-    max-width: 75%;
+    max-width: 80%;
     line-height: 1.1;
     word-break: break-word;
+    text-transform: none !important;
+    /* Đảm bảo không bị in hoa toàn bộ */
 }
 
 .export-name-note {
-    color: #cc0000;
-    text-transform: lowercase;
-    font-weight: 700;
-    display: inline-block;
+    color: #d63031 !important;
+    /* Màu đỏ đậm hơn */
+    text-transform: lowercase !important;
+    font-weight: 600;
+    display: inline;
+    /* Chuyển sang inline để không bị nhảy dòng */
     margin-left: 10px;
 }
 
