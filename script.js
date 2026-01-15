@@ -35,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedImageBase64 = null;
 
     // CẤU HÌNH GOOGLE SHEETS & DRIVE
-    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV_GtZzTm4iDRw2HZgVArJxo_b5qbGRontZ9HHBZDJIS_e3EmycnozG2thb8dwhAJ_g7q7RPYow2ZA/pub?gid=0&single=true&output=csv';
-    const GAS_WEB_APP_URL = ''; // NGƯỜI DÙNG CẦN DÁN URL WEB APP SAU KHI TRIỂN KHAI GAS
+    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV_GtZzTm4iDRw2HZgVArJxo_b5qbGRontZ9HHBZDJIS_e3EmycnozG2thb8dwhAJ_g7q7RPyow2ZA/pub?gid=0&single=true&output=csv';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzKBraC_fEKMyXvQC_F7t3VI71iBzAZQt0taZkaUFQNUq2rYWHsiVuSNp1RODbwp64Y/exec'; // NGƯỜI DÙNG CẦN DÁN URL WEB APP SAU KHI TRIỂN KHAI GAS
 
     // Placeholder ảnh nội bộ để tránh lỗi mạng ERR_NAME_NOT_RESOLVED
     const LOCAL_PLACEHOLDER = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iI2FhYSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+S2jDtW5nIGPDsyDhuqNuaDwvdGV4dD48L3N2Zz4=';
 
-    let sheetProducts = []; // Dữ liệu từ Google Sheets
+    let sheetProducts = typeof products !== 'undefined' ? products : []; // Dữ liệu mặc định từ data.js hoặc mảng rỗng
     let localProducts = JSON.parse(localStorage.getItem('titaco_local_products') || '[]'); // Dữ liệu thêm tay
     let allProducts = []; // Tổng hợp
 
@@ -223,6 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Lỗi khi tải Google Sheets:', error);
+            // Nếu lỗi 404 hoặc mạng, vẫn giữ lại sheetProducts cũ (fallback data.js)
+            if (sheetProducts.length === 0 && typeof products !== 'undefined') {
+                sheetProducts = products;
+            }
         }
         refreshData();
     }
