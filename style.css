@@ -506,7 +506,8 @@ main {
 /* EXPORT TEMPLATE STYLE (Titaco Mẫu Tối Ưu) */
 .export-container {
     width: 1200px;
-    min-height: 1600px; /* Linh hoạt chiều cao */
+    min-height: 1600px;
+    /* Linh hoạt chiều cao */
     background: white;
     padding: 80px;
     display: flex;
@@ -524,13 +525,22 @@ main {
 }
 
 .export-product-name {
-    font-size: 64px; /* Giảm từ 80px */
+    font-size: 64px;
+    /* Giảm từ 80px */
     font-weight: 900;
     color: #1b75bc;
-    text-transform: uppercase;
+    /* text-transform: uppercase; -- Bỏ để hỗ trợ phần trong ngoặc chữ thường */
     max-width: 75%;
     line-height: 1.1;
     word-break: break-word;
+}
+
+.export-name-note {
+    color: #cc0000;
+    text-transform: lowercase;
+    font-weight: 700;
+    display: inline-block;
+    margin-left: 10px;
 }
 
 .export-dungtich {
@@ -558,7 +568,8 @@ main {
 
 .export-main-body {
     display: flex;
-    align-items: center; /* Căn giữa theo chiều dọc */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
     gap: 60px;
     margin-bottom: 60px;
 }
@@ -600,7 +611,8 @@ main {
 }
 
 .export-hoatchat-text {
-    font-size: 38px; /* Giảm từ 50px */
+    font-size: 38px;
+    /* Giảm từ 50px */
     font-weight: 700;
     line-height: 1.4;
     color: #2c3e50;
@@ -612,7 +624,8 @@ main {
     border-radius: 50px;
     padding: 50px 60px;
     margin-bottom: 50px;
-    flex-grow: 1; /* Cho phép giãn rộng nếu cần */
+    flex-grow: 1;
+    /* Cho phép giãn rộng nếu cần */
 }
 
 .export-congdung-list {
@@ -625,7 +638,8 @@ main {
     display: flex;
     align-items: flex-start;
     gap: 25px;
-    font-size: 32px; /* Giảm từ 36px */
+    font-size: 32px;
+    /* Giảm từ 36px */
     font-weight: 600;
     color: #1b75bc;
     line-height: 1.5;
@@ -660,7 +674,8 @@ main {
 }
 
 .export-lieuluong-content p {
-    font-size: 42px; /* Giảm từ 50px */
+    font-size: 42px;
+    /* Giảm từ 50px */
     font-weight: 800;
     color: #333;
     line-height: 1.3;

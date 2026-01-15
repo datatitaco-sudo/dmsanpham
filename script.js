@@ -398,6 +398,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('nhomList').innerHTML = nhoms.map(n => `<option value="${n}">`).join('');
     }
 
+    // Hàm định dạng tên sản phẩm: Phần trong ngoặc chữ thường và màu đỏ
+    function formatProductName(name) {
+        return name.replace(/\((.*?)\)/g, '<span class="export-name-note">($1)</span>');
+    }
+
     // XUẤT ẢNH PNG
     exportPngBtn.addEventListener('click', async () => {
         if (!currentModalProduct) return;
@@ -409,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         exportTemplate.innerHTML = `
             <div class="export-header">
-                <div class="export-product-name">${p.tenSp}</div>
+                <div class="export-product-name">${formatProductName(p.tenSp)}</div>
                 <div class="export-dungtich">
                     <span>Dung tích</span>
                     <div><i class="fas fa-tint"></i> ${p.dungTich}</div>
