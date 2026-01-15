@@ -417,15 +417,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="export-main-body">
                 <div class="export-img-card">
-                    <img src="${p.hinhAnh || LOCAL_PLACEHOLDER}" onerror="this.src='${LOCAL_PLACEHOLDER}'">
+                    <img src="${p.hinhAnh || LOCAL_PLACEHOLDER}" onerror="this.src=LOCAL_PLACEHOLDER">
                 </div>
                 <div class="export-side-info">
-                    <div class="export-label-small"><i class="fas fa-flask"></i> Hoạt chất chính</div>
+                    <div class="export-label-small"><i class="fas fa-microscope"></i> Thành phần / Hoạt chất</div>
                     <div class="export-hoatchat-text">${p.hoatChat}</div>
                 </div>
             </div>
             <div class="export-congdung-box">
-                <div class="export-label-small" style="color: #1b75bc; margin-bottom: 40px;">Công dụng đặc hiệu</div>
+                <div class="export-label-small" style="color: #1b75bc; margin-bottom: 30px;"><i class="fas fa-certificate"></i> Công dụng đặc hiệu</div>
                 <div class="export-congdung-list">
                     ${congDungLines.map((line, idx) => `
                         <div class="export-congdung-item">
@@ -442,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>${p.lieuPhun || 'Theo hướng dẫn trên bao bì'}</p>
                 </div>
             </div>
-            <div class="export-footer-text">Titaco Agri Catalogue System</div>
+            <div class="export-footer-text">© Titaco Agri Catalogue System - Chất lượng hàng đầu</div>
         `;
 
         // Chờ ảnh load xong hoặc lỗi đều tiến hành xuất ảnh sau 2s (safety timeout)
