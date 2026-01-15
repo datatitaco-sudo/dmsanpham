@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedImageBase64 = null;
 
     // CẤU HÌNH GOOGLE SHEETS & DRIVE
-    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV_GtZzTm4iDRw2HZgVArXxo_b5qbGRontZ9HHBZDJIS_e3EmycnozG2thb8dwhAJ_g7q7RPYow2ZA/pub?gid=0&single=true&output=csv';
+    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV_GtZzTm4iDRw2HZgVArJxo_b5qbGRontZ9HHBZDJIS_e3EmycnozG2thb8dwhAJ_g7q7RPYow2ZA/pub?gid=0&single=true&output=csv';
     const GAS_WEB_APP_URL = ''; // NGƯỜI DÙNG CẦN DÁN URL WEB APP SAU KHI TRIỂN KHAI GAS
 
     // Placeholder ảnh nội bộ để tránh lỗi mạng ERR_NAME_NOT_RESOLVED
